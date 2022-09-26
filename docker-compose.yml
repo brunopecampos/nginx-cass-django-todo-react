@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  rev_proxy:
+    build:
+      context: "./"
+      dockerfile: "nginx.df"
+    ports:
+      - "80:80"
+    networks:
+      - "nginx_network"
+
+  frontend:
+    build: .
+    networks:
+      - "nginx_network"
+    expose:
+      - "3000"
+
+  db:
+    build:
+      context: "./"
+      dockerfile: "cassandra.df"
+    networks:
+      - "nginx_network"
+    volumes:
+      - "cass-shared:/var/lib/cassandra/data"
+
+networks:
+  nginx_network:
+    driver: "bridge"
+    attachable: true
+
+volumes:
+  cass-shared:
+    external: true
