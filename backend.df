@@ -1,10 +1,6 @@
-FROM python
+FROM node
 COPY ./backend ./app
 WORKDIR ./app
-# install pipenv
-RUN apt update && apt install -y pipenv
-# set enviroment
-RUN pipenv shell 
-# install dependencies
-RUN pipenv install
-CMD ["python", "manage.py", "runserver"]
+RUN npm install
+RUN apt update && apt install -y netcat
+CMD ["sh", "cassandra_check.sh"]

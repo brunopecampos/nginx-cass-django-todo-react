@@ -16,14 +16,23 @@ services:
     expose:
       - "3000"
 
-  db:
+  backend:
     build:
       context: "./"
-      dockerfile: "cassandra.df"
+      dockerfile: "backend.df"
     networks:
       - "nginx_network"
-    volumes:
-      - "cass-shared:/var/lib/cassandra/data"
+    depends_on:
+      - "db"
+#
+#db:
+#  build:
+#    context: "./"
+#    dockerfile: "cassandra.df"
+#  networks:
+#    - "nginx_network"
+#  volumes:
+#    - "cass-shared:/var/lib/cassandra/data"
 
 networks:
   nginx_network:
