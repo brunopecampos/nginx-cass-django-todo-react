@@ -1,5 +1,7 @@
-while ! nc -z nginx-cass-django-todo-react-db-1 9042; do
+while ! nc -z ${DB_CONTAINER_NAME} 9042; do
     sleep 1
 done
-echo "Cassandra is ready"
-node example.js
+echo "Cassandra is ready"   
+echo "starting node server"
+#node example.js
+node server.js

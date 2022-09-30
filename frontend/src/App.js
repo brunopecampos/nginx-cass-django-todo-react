@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import opus from "./1555531463974.png";
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [percent, setPercent] = useState("0");
+
+  const updateSalary = async () => {
+    await increaseSalary();
+    let newPercent = await getPercent();
+    console.log(newPercent);
+    setPercent(newPercent);
+  };
+
+  const increaseSalary = async () => {
+    await fetch("http://localhost/increase-salary");
+  };
+  const getPercent = async () => {
+    return await fetch("http://localhost/get-salary")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="App"
+      style={{
+        backgroundColor: "lightgrey",
+        paddingTop: 150,
+        paddingBottom: 350,
+      }}
+    >
+      <img src={opus} style={{ height: 300 }} />
+      <p style={{ fontSize: 30 }}>
+        <code>Percentual de aumento de salário após a apresentação:</code>
+      </p>
+      <p style={{ fontSize: 50 }}>
+        <code>{percent}%</code>
+      </p>
+      <button
+        onClick={updateSalary}
+        style={{ fontSize: 30, backgroundColor: "lightblue", borderRadius: 5 }}
+      >
+        <code>Aumentar Salário</code>
+      </button>
     </div>
   );
 }

@@ -2,5 +2,7 @@ FROM node
 COPY ./backend ./app
 WORKDIR ./app
 RUN npm install
-RUN apt update && apt install -y netcat
-CMD ["sh", "cassandra_check.sh"]
+RUN apt update && apt install -y netcat && apt install -y dnsutils
+RUN echo $DB_NAME
+#CMD /bin/sh
+CMD sh cassandra_check.sh $DB_CONTAINER_NAME
