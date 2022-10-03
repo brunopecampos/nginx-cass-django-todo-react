@@ -51,13 +51,15 @@ services:
     networks:
       - "db_cluster"
     environment:
-      - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
       - CASSANDRA_PASSWORD_SEEDER=yes
       - CASSANDRA_PASSWORD=senha_muito_dificil123
       - CASSANDRA_USER=brunao_do_capao
+      - CASSANDRA_CLUSTER_NAME=cluster_do_brunao
+      - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
     volumes:
-      - "cluster-storage:/var/lib/cassandra/data"
+      - "cluster-storage:/bitnami"
       - "./database/cql_scripts:/docker-entrypoint-initdb.d"
+      #- "./database/config_files/db1_config_files:/bitnami/cassandra/conf:ro"
     expose:
       - 7000
       - 7001
@@ -73,7 +75,14 @@ services:
     networks:
       - "db_cluster"
     environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=senha_muito_dificil123
+      - CASSANDRA_USER=brunao_do_capao
+      - CASSANDRA_CLUSTER_NAME=cluster_do_brunao
       - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
+    #volumes:
+    #- "cluster-storage:/bitnami"
+    #- "./database/config_files/db2_config_files:/bitnami/cassandra/conf:ro"
     expose:
       - 7000
       - 7001
