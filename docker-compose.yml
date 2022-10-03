@@ -30,24 +30,51 @@ services:
       dockerfile: "backend.df"
     container_name: "backend"
     environment:
-      - DB_CONTAINER_NAME
+      - DB1_NAME
+      - DB2_NAME
     networks:
       - "backend_bridge"
-      - "backend_db_bridge"
+      - "db_cluster"
     depends_on:
-      - "db"
-    #ports:
-    #  - 4000:4000
-  #
-  db:
+      - "db2"
+    expose:
+      - "4000"
+
+  db1:
     build:
       context: "./"
       dockerfile: db.df
-    container_name: $DB_CONTAINER_NAME
+    container_name: $DB1_NAME
     networks:
-      - "backend_db_bridge"
+      - "db_cluster"
     volumes:
       - "cass-shared:/var/lib/cassandra/data"
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
+
+  db2:
+    build:
+      context: "./"
+      dockerfile: db.df
+    container_name: $DB2_NAME
+    networks:
+      - "db_cluster"
+    #volumes:
+    #  - "cass-shared2:/var/lib/cassandra/data"
+    depends_on:
+      - $DB1_NAME
+    environment:
+      - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
 
 networks:
   frontend_bridge:
@@ -58,7 +85,7 @@ networks:
     driver: "bridge"
     attachable: true
 
-  backend_db_bridge:
+  db_cluster:
     driver: "bridge"
     attachable: true
 

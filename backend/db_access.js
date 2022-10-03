@@ -5,7 +5,7 @@ let cassandra = require("cassandra-driver");
 let authProvider = new cassandra.auth.PlainTextAuthProvider("cassandra", "cassandra");
 // Replace the PublicIPs with the IP addresses of your clusters
 console.log(process.env.DB_CONTAINER_NAME);
-let contactPoints = [process.env.DB_CONTAINER_NAME];
+let contactPoints = [process.env.DB1_NAME, process.env.DB2_NAME];
 // Replace DataCenter with the name of your data center, for example: 'AWS_VPC_US_EAST_1'
 let localDataCenter = "datacenter1";
 
