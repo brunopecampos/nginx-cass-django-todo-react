@@ -1,8 +1,15 @@
 // ”cassandra-driver” is in the node_modules folder. Redirect if necessary.
 let cassandra = require("cassandra-driver");
 
+let fs = require("fs");
+const readFile = (filePath) => {
+  return fs.readFileSync(filePath);
+};
+cassUser = readFile("/run/secrets/db_user");
+cassPass = readFile("/run/secrets/db_pass");
+
 // Replace 'Username' and 'Password' with the username and password from your cluster settings
-let authProvider = new cassandra.auth.PlainTextAuthProvider("cassandra", "cassandra");
+let authProvider = new cassandra.auth.PlainTextAuthProvider(cassUser, cassPass);
 // Replace the PublicIPs with the IP addresses of your clusters
 console.log(process.env.DB_CONTAINER_NAME);
 let contactPoints = [process.env.DB1_NAME, process.env.DB2_NAME];

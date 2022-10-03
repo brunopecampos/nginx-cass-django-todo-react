@@ -1,19 +1,26 @@
 import opus from "./1555531463974.png";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [percent, setPercent] = useState("0");
+  const [percent, setPercent] = useState("");
+
+  useEffect(() => {
+    updatePercent();
+  }, []);
 
   const updateSalary = async () => {
     await increaseSalary();
-    let newPercent = await getPercent();
-    console.log(newPercent);
-    setPercent(newPercent);
+    updatePercent();
   };
 
   const increaseSalary = async () => {
     await fetch("http://localhost/increase-salary");
+  };
+  const updatePercent = async () => {
+    let newPercent = await getPercent();
+    console.log(newPercent);
+    setPercent(newPercent);
   };
   const getPercent = async () => {
     return await fetch("http://localhost/get-salary")
