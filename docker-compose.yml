@@ -45,16 +45,19 @@ services:
 
   db1:
     build:
-      context: "./"
+      context: "."
       dockerfile: db.df
     container_name: $DB1_NAME
     networks:
       - "db_cluster"
+    environment:
+      - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=senha_muito_dificil123
+      - CASSANDRA_USER=brunao_do_capao
     volumes:
       - "cluster-storage:/var/lib/cassandra/data"
-      - type: "volume"
-        source: "cluster-config"
-        target: "/etc/cassandra"
+      - "./database/cql_scripts:/docker-entrypoint-initdb.d"
     expose:
       - 7000
       - 7001
@@ -64,13 +67,11 @@ services:
 
   db2:
     build:
-      context: "./"
-      dockerfile: db.df
+      context: "."
+      dockerfile: "db.df"
     container_name: $DB2_NAME
     networks:
       - "db_cluster"
-    depends_on:
-      - $DB1_NAME
     environment:
       - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME
     expose:
@@ -79,24 +80,6 @@ services:
       - 7199
       - 9042
       - 9160
-
-  #db3:
-  #  build:
-  #    context: "./"
-  #    dockerfile: db.df
-  #  container_name: $DB3_NAME
-  #  networks:
-  #    - "db_cluster"
-  #  depends_on:
-  #    - $DB1_NAME
-  #  environment:
-  #    - CASSANDRA_SEEDS=$DB1_NAME,$DB2_NAME,$DB3_NAME
-  #  expose:
-  #    - 7000
-  #    - 7001
-  #    - 7199
-  #    - 9042
-  #    - 9160
 
 networks:
   frontend_bridge:

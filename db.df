@@ -1,4 +1,4 @@
-FROM cassandra
-COPY database/db_initial_data.cql ./
+FROM bitnami/cassandra:latest
+#COPY database/db_initial_data.cql ./
 #RUN apt update && apt install -y netcat && apt install -y dnsutils
 #RUN ["sh", "fill_db.sh"]
