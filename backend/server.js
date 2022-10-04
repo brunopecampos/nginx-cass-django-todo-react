@@ -10,18 +10,20 @@ app.get("/get-salary", async (req, res) => {
   console.log("getSalary()");
   a = await cassandra.getSalary();
   console.log(a);
+  currentPercentIndex = increasePercents.indexOf(parseFloat(a));
+  console.log(currentPercentIndex);
   res.send(a);
 });
 
-increasePercents = [1.0, 2.0, 5.0, 20.0, 100.0, 11273632.0];
+increasePercents = [0.5, 1.0, 2.0, 5.0, 20.0, 100.0, 11273632.0];
 currentPercentIndex = 0;
 app.get("/increase-salary", async (req, res) => {
-  if (currentPercentIndex == 6) currentPercentIndex = 0;
+  currentPercentIndex++;
+  if (currentPercentIndex == 7) currentPercentIndex = 0;
   newSal = increasePercents[currentPercentIndex].toFixed(1).toString();
   console.log("increaseSalary: " + newSal);
   a = await cassandra.increseSalary(newSal);
-  currentPercentIndex++;
-  console.log(a);
+  console.log("OK");
   res.send("OK");
 });
 

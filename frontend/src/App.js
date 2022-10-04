@@ -22,6 +22,7 @@ function App() {
     console.log(newPercent);
     setPercent(newPercent);
   };
+
   const getPercent = async () => {
     return await fetch("http://localhost/get-salary")
       .then((response) => response.json())
