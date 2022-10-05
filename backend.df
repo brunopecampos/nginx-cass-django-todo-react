@@ -6,6 +6,4 @@ RUN apt update && apt install -y netcat && apt install -y dnsutils
 RUN groupadd --gid 1000 node \
     && useradd --uid 1000 --gid node --shell /bin/bash node
 USER node
-RUN echo $DB_NAME
-#CMD /bin/sh
 CMD sh cassandra_check.sh $DB_CONTAINER_NAME

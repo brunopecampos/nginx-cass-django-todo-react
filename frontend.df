@@ -2,4 +2,5 @@ FROM node as frontend
 COPY ./frontend ./app
 WORKDIR ./app
 RUN npm install
+USER node
 CMD ["npm", "start"]
