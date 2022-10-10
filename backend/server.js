@@ -11,7 +11,6 @@ app.get("/get-salary", async (req, res) => {
   a = await cassandra.getSalary();
   console.log(a);
   currentPercentIndex = increasePercents.indexOf(parseFloat(a));
-  console.log(currentPercentIndex);
   res.send(a);
 });
 

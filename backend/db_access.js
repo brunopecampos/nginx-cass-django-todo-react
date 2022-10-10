@@ -50,12 +50,12 @@ const increseSalary = async (newSalary) => {
 
 const getSalary = async () => {
   let query = "SELECT raise_percent FROM salary.my_salary";
+  console.log("query: " + query);
   let res = "";
   let q1 = await client
     .execute(query)
     .then((result) => {
       resStr = result.rows[0].raise_percent;
-      console.log(resStr);
       return resStr;
     })
     .catch((err) => {

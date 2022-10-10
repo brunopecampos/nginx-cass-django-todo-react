@@ -48,9 +48,7 @@ services:
       - "4000"
 
   db1:
-    build:
-      context: "."
-      dockerfile: db.df
+    image: "bitnami/cassandra:latest"
     container_name: $DB1_NAME
     networks:
       - "db_cluster"
@@ -75,6 +73,7 @@ services:
           memory: 4G
 
   db2:
+    image: "bitnami/cassandra:latest"
     build:
       context: "."
       dockerfile: "db.df"
