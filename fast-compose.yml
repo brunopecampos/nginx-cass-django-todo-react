@@ -53,11 +53,8 @@ services:
     networks:
       - "db_cluster"
     environment:
-      - CASSANDRA_PASSWORD_SEEDER
-      - CASSANDRA_PASSWORD
-      - CASSANDRA_USER
-      - CASSANDRA_CLUSTER_NAME
       - CASSANDRA_SEEDS
+      - CASSANDRA_CLUSTER_NAME
     volumes:
       - "cluster-storage:$CASSANDRA_STORAGE_PATH"
       - "$CQL_SCRIPTS_PATH:$CASSANDRA_SCRIPTS_PATH"

@@ -2,7 +2,7 @@ FROM bitnami/node
 COPY ./backend ./app
 WORKDIR ./app
 RUN npm install
-RUN apt update && apt install -y netcat && apt install -y dnsutils
+RUN apt update && apt install -y netcat
 RUN groupadd --gid 1000 node \
     && useradd --uid 1000 --gid node --shell /bin/bash node
 USER node
