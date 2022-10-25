@@ -37,6 +37,10 @@ services:
         limits:
           memory: "1G"
           cpus: "1"
+    # for debbuging only
+    #image: node
+    #volumes:
+    #  - "./frontend:/app"
 
   backend:
     build:
@@ -48,7 +52,7 @@ services:
       - DB2_NAME
     networks:
       - "backend_bridge"
-      - "db_cluster"
+      - "cluster_bridge"
     depends_on:
       - "db2"
     secrets:
@@ -61,12 +65,16 @@ services:
         limits:
           memory: "300M"
           cpus: "1"
+    # for debbuging only
+    #image: bitnami/node
+    #volumes:
+    #  - "./backend:/app"
 
   db1:
-    image: "bitnami/cassandra:latest"
+    image: "bitnami/cassandra:4.0.7"
     container_name: $DB1_NAME
     networks:
-      - "db_cluster"
+      - "cluster_bridge"
     environment:
       - CASSANDRA_PASSWORD_SEEDER
       - CASSANDRA_PASSWORD
@@ -86,10 +94,10 @@ services:
           cpus: "8"
 
   db2:
-    image: "bitnami/cassandra:latest"
+    image: "bitnami/cassandra:4.0.7"
     container_name: $DB2_NAME
     networks:
-      - "db_cluster"
+      - "cluster_bridge"
     environment:
       - CASSANDRA_SEEDS
       - CASSANDRA_CLUSTER_NAME
@@ -106,16 +114,8 @@ services:
 
 networks:
   frontend_bridge:
-    driver: "bridge"
-    attachable: true
-
   backend_bridge:
-    driver: "bridge"
-    attachable: true
-
-  db_cluster:
-    driver: "bridge"
-    attachable: true
+  cluster_bridge:
 
 volumes:
   node1_storage:
