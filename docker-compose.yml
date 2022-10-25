@@ -2,8 +2,8 @@ version: "3.9"
 services:
   rev_proxy:
     build:
-      context: "./"
-      dockerfile: "nginx.df"
+      context: "./rev_proxy"
+      dockerfile: "rev_proxy.df"
     container_name: "rev_proxy"
     ports:
       - "80:80"
@@ -13,26 +13,34 @@ services:
     depends_on:
       - "frontend"
       - "backend"
+    #volumes:
+    #  - "./rev_proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro"
+    deploy:
+      resources:
+        limits:
+          memory: "100M"
+          cpus: "1"
 
   frontend:
     build:
-      context: "./"
+      context: "./frontend"
       dockerfile: "frontend.df"
     container_name: "frontend"
     networks:
       - "frontend_bridge"
     expose:
       - "3000"
-
-  backend:
-    build:
-      context: "./"
-      dockerfile: "backend.df"
-    container_name: "backend"
     deploy:
       resources:
         limits:
-          memory: "300M"
+          memory: "1G"
+          cpus: "1"
+
+  backend:
+    build:
+      context: "./backend"
+      dockerfile: "backend.df"
+    container_name: "backend"
     environment:
       - DB1_NAME
       - DB2_NAME
@@ -46,6 +54,11 @@ services:
       - db_user
     expose:
       - "4000"
+    deploy:
+      resources:
+        limits:
+          memory: "300M"
+          cpus: "1"
 
   db1:
     image: "bitnami/cassandra:latest"
@@ -67,7 +80,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 5G
+          cpus: "8"
 
   db2:
     image: "bitnami/cassandra:latest"
@@ -80,10 +94,13 @@ services:
     expose:
       - 7000
       - 9042
+    volumes:
+      - "cluster-storage2:$CASSANDRA_STORAGE_PATH"
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 5G
+          cpus: "8"
 
 networks:
   frontend_bridge:
@@ -102,6 +119,7 @@ volumes:
   cluster-storage:
     driver: "local"
     name: "cluster-storage"
+  cluster-storage2:
 
 secrets:
   db_pass:

@@ -5,22 +5,19 @@ import { useState, useEffect } from "react";
 function App() {
   const [percent, setPercent] = useState("");
 
-  useEffect(() => {
-    updatePercent();
-  }, []);
-
-  const updateSalary = async () => {
-    await increaseSalary();
-    updatePercent();
-  };
-
   const increaseSalary = async () => {
     await fetch("http://localhost/increase-salary");
   };
+
   const updatePercent = async () => {
     let newPercent = await getPercent();
     console.log(newPercent);
     setPercent(newPercent);
+  };
+
+  const updateSalary = async () => {
+    await increaseSalary();
+    updatePercent();
   };
 
   const getPercent = async () => {
@@ -31,6 +28,15 @@ function App() {
         return data;
       });
   };
+
+  useEffect(() => {
+    const updatePercent = async () => {
+      let newPercent = await getPercent();
+      console.log(newPercent);
+      setPercent(newPercent);
+    };
+    updatePercent();
+  }, []);
 
   return (
     <div

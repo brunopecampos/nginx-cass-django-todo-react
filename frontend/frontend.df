@@ -1,6 +1,7 @@
 FROM node as frontend
-COPY ./frontend ./app
+COPY --chown=node:node ./ ./app
 WORKDIR ./app
 RUN npm install
+COPY --chown=node:node . .
 USER node
 CMD ["npm", "start"]

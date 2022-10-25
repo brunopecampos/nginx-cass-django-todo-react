@@ -1,6 +1,10 @@
-while [ $(nc -z ${DB2_NAME} 9042) ]
-do
-    echo "Cassandra not ready"
+user=$(cat /run/secrets/db_user)
+pass=$(cat /run/secrets/db_pass)
+
+echo $user
+echo $pass
+
+while ! cqlsh -e 'describe cluster' -u ${user} -p ${pass} ${DB2_NAME} ; do
     sleep 1
 done
 echo "Cassandra is ready"   
