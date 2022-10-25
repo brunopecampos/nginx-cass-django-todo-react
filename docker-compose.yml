@@ -13,13 +13,15 @@ services:
     depends_on:
       - "frontend"
       - "backend"
-    #volumes:
-    #  - "./rev_proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro"
     deploy:
       resources:
         limits:
           memory: "100M"
           cpus: "1"
+    # for debbuging only
+    #image: bitnami/nginx
+    #volumes:
+    #  - "./rev_proxy/default.conf:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro"
 
   frontend:
     build:
@@ -72,7 +74,7 @@ services:
       - CASSANDRA_CLUSTER_NAME
       - CASSANDRA_SEEDS
     volumes:
-      - "cluster-storage:$CASSANDRA_STORAGE_PATH"
+      - "node1_storage:$CASSANDRA_STORAGE_PATH"
       - "$CQL_SCRIPTS_PATH:$CASSANDRA_SCRIPTS_PATH"
     expose:
       - 7000
@@ -95,7 +97,7 @@ services:
       - 7000
       - 9042
     volumes:
-      - "cluster-storage2:$CASSANDRA_STORAGE_PATH"
+      - "node2_storage:$CASSANDRA_STORAGE_PATH"
     deploy:
       resources:
         limits:
@@ -116,10 +118,8 @@ networks:
     attachable: true
 
 volumes:
-  cluster-storage:
-    driver: "local"
-    name: "cluster-storage"
-  cluster-storage2:
+  node1_storage:
+  node2_storage:
 
 secrets:
   db_pass:

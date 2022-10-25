@@ -5,6 +5,7 @@ echo $user
 echo $pass
 
 while ! cqlsh -e 'describe cluster' -u ${user} -p ${pass} ${DB2_NAME} ; do
+    echo "Cassandra is not ready"
     sleep 1
 done
 echo "Cassandra is ready"   
